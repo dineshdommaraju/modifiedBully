@@ -84,44 +84,48 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     }
     
     //A new client joining the network
-    public void join() throws AccessException, RemoteException, NotBoundException{
-    	Scanner sc = new Scanner(System.in);
-    	System.out.print("Enter the IP of any host: ");
-    	String ip = sc.next();
-    	System.out.print("Enter the nodeID: ");
-    	String node = sc.next();
-    	Registry registry = LocateRegistry.getRegistry(ip,5000);
-    	RemoteInterface ri = (RemoteInterface)registry.lookup(node);
-    	this.nodeInfo = ri.getDetails(this.nodeID,this.nodeIP);
-    	this.coordinatorID = ri.getCoordinatorID();
+    public void join(String IP, int port, int nodeID) throws AccessException, RemoteException, NotBoundException{
+    	
+    	
+    	registry = LocateRegistry.getRegistry(IP,port);	//Connecting to the given host
+    	RemoteInterface ri = (RemoteInterface)registry.lookup(""+nodeID);	//Looking for the nodeId in the registry
+    	this.nodeInfo = ri.getDetails(this.nodeID,this.nodeIP);	//Getting all the info from the node and copying to the current new node
+    	this.coordinatorID = ri.getCoordinatorID();		//Getting the coordinator id
     	
     }
     
+    
+    //If the new client is the first client
+    public void join(int nodeID){
+    	this.coordinatorID=nodeID;	//Updating the coordinator as itself
+    }
+    
     //Returning the coordinator
-    public String getCoordinatorID(){
+    public int getCoordinatorID(){
     	
-    	return this.coordinatorID;
+    	return coordinatorID;
     	
     }
     
     //Get the details of the nodes in the network and updating other nodes with the new node joined
-    public Hashtable<String,String> getDetails(String nodeID, String nodeIP) throws RemoteException, NotBoundException{
+    public HashMap<Integer,String> getDetails(int nodeID, String nodeIP) throws RemoteException, NotBoundException{
     	
     	Registry registry;
     	RemoteInterface ri;
-    	for(Map.Entry<String,String> entry: nodeInfo.entrySet()){
-    		registry = LocateRegistry.getRegistry(""+entry.getValue(),portNumber);
+    	for(Entry<Integer, String> entry: nodeInfo.entrySet()){
+    		String[] tempIP = entry.getValue().split("|");
+    		registry = LocateRegistry.getRegistry(tempIP[0],Integer.parseInt(tempIP[1]));
     		ri = (RemoteInterface)registry.lookup(""+entry.getKey());
     		ri.newNodeJoined(nodeID,nodeIP);
     	}
-    	Hashtable<String,String> peerDetails =  this.nodeInfo;
+    	HashMap<Integer,String> peerDetails =  this.nodeInfo;
     	this.nodeInfo.put(nodeID, nodeIP);
     	return peerDetails;
     }
     
     //Other nodes adding the new node joined into their list
     @Override
-	public void newNodeJoined(String nodeID, String nodeIP) {
+	public void newNodeJoined(int nodeID, String nodeIP) {
 		
     	this.nodeInfo.put(nodeID,nodeIP);
 		
