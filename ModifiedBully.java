@@ -1,3 +1,5 @@
+package modifiedBully1;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -26,18 +28,15 @@ import java.util.Scanner;
 public class ModifiedBully extends UnicastRemoteObject implements RemoteInterface {
 
 	private static final long serialVersionUID = 1L;
-	int portNumber;			//Node's port
+	int portNumber;					//Node's port
     int nodeID;						//Node's ID
     String nodeIP;					//Node's IP
     int timeOut;					//To set the time out for every request
     
     int currentCriticalSectionNode;	//Node which is using the critical section
     ArrayList<Integer> criticalSectionQueue;	//Nodes which are waiting to enter CS
-
     int coordinatorID;				//Current coordinator
-
     Registry registry;				//Common Registry
-
     boolean isCoordinator;    // Yes - If this node is the coordinator; No - otherwise
     boolean criticalSectionAvailable = true;	//Is CS Available or not
     boolean electionFlag=false;			//State of the election
@@ -46,7 +45,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     
     int incomingMessageCount;
    
-
+    /*
     ModifiedBully(String id, int coordId, String coordIP)
             throws AlreadyBoundException, RemoteException, UnknownHostException {
         //this.portNumber = portNumber;
@@ -62,11 +61,12 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
         
         System.setProperty("sun.rmi.transport.proxy.connectTimeout", "1000");
  
-    }
+    }*/
 
     public void setupConnection() throws RemoteException, AlreadyBoundException {
-        registry = LocateRegistry.createRegistry(portNumber);
+    	registry = LocateRegistry.createRegistry(portNumber);
         registry.bind("" + this.nodeID,this);
+        
     }
     
     //Initiating Election
@@ -88,44 +88,48 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     }
     
     //A new client joining the network
-    public void join() throws AccessException, RemoteException, NotBoundException{
-    	Scanner sc = new Scanner(System.in);
-    	System.out.print("Enter the IP of any host: ");
-    	String ip = sc.next();
-    	System.out.print("Enter the nodeID: ");
-    	String node = sc.next();
-    	Registry registry = LocateRegistry.getRegistry(ip,5000);
-    	RemoteInterface ri = (RemoteInterface)registry.lookup(node);
-    	this.nodeInfo = ri.getDetails(this.nodeID,this.nodeIP);
-    	this.coordinatorID = ri.getCoordinatorID();
+    public void join(String IP, int port, int nodeID) throws AccessException, RemoteException, NotBoundException{
+    	
+    	
+    	registry = LocateRegistry.getRegistry(IP,port);	//Connecting to the given host
+    	RemoteInterface ri = (RemoteInterface)registry.lookup(""+nodeID);	//Looking for the nodeId in the registry
+    	this.nodeInfo = ri.getDetails(this.nodeID,this.nodeIP);	//Getting all the info from the node and copying to the current new node
+    	this.coordinatorID = ri.getCoordinatorID();		//Getting the coordinator id
     	
     }
     
+    
+    //If the new client is the first client
+    public void join(int nodeID){
+    	this.coordinatorID=nodeID;	//Updating the coordinator as itself
+    }
+    
     //Returning the coordinator
-    public String getCoordinatorID(){
+    public int getCoordinatorID(){
     	
-    	return this.coordinatorID;
+    	return coordinatorID;
     	
     }
     
     //Get the details of the nodes in the network and updating other nodes with the new node joined
-    public Hashtable<String,String> getDetails(String nodeID, String nodeIP) throws RemoteException, NotBoundException{
+    public HashMap<Integer,String> getDetails(int nodeID, String nodeIP) throws RemoteException, NotBoundException{
     	
     	Registry registry;
     	RemoteInterface ri;
-    	for(Map.Entry<String,String> entry: nodeInfo.entrySet()){
-    		registry = LocateRegistry.getRegistry(""+entry.getValue(),portNumber);
+    	for(Entry<Integer, String> entry: nodeInfo.entrySet()){
+    		String[] tempIP = entry.getValue().split("|");
+    		registry = LocateRegistry.getRegistry(tempIP[0],Integer.parseInt(tempIP[1]));
     		ri = (RemoteInterface)registry.lookup(""+entry.getKey());
     		ri.newNodeJoined(nodeID,nodeIP);
     	}
-    	Hashtable<String,String> peerDetails =  this.nodeInfo;
+    	HashMap<Integer,String> peerDetails =  this.nodeInfo;
     	this.nodeInfo.put(nodeID, nodeIP);
     	return peerDetails;
     }
     
     //Other nodes adding the new node joined into their list
     @Override
-	public void newNodeJoined(String nodeID, String nodeIP) {
+	public void newNodeJoined(int nodeID, String nodeIP) {
 		
     	this.nodeInfo.put(nodeID,nodeIP);
 		
@@ -189,6 +193,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
 		
 	}
 
+<<<<<<< HEAD
     void broadcastNewNodeInfo(String IP, int port, int nodeID) throws NotBoundException {
         ArrayList<Integer> nodeIDs = new ArrayList<Integer>(this.nodeInfo.keySet());
         for(int node : nodeIDs ) {
@@ -221,7 +226,45 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
         this.electionFlag = false;
     }
 
+=======
+	void userPromt() throws IOException
+	{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		while(true)
+		{
+			String command=br.readLine();
+			String[] commandTokens=command.split(" ");
+			if(commandTokens[0].equals("join"))
+			{
+				
+			}else if(commandTokens[0].equals("request"))
+			{
+				
+			}else if(commandTokens[0].equals("leave"))
+			{
+				
+			}else if(commandTokens[0].equals("help"))
+			{
+				
+			}else{
+				System.out.println("Wrong command!.Type help for list of commands");
+			}
+		}
+		
+		
+		
+			
+		
+		
+	}
+>>>>>>> 05295d873fcd90aaa241da199f5f7f83e36a3926
     public static void main(String[] args) throws AlreadyBoundException, IOException, NotBoundException {
+    	
+    	
+    	ModifiedBully obj=new ModifiedBully();
+    	obj.userPromt();
+    	
+    	/*
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         System.out.print("Hey! I'm a new node.. Let's set me up!");
       //  System.out.print("Enter the portNumber number: ");
@@ -242,6 +285,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
 
         System.out.println("\nI'm up and running at " + aBully.getIP() +
                 " and listening at 5000");
+        */
     }
 
     private String getIP() {
