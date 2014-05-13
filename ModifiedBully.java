@@ -10,8 +10,6 @@ import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.*;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -250,10 +248,10 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
             			int status=aNode.remoteLeave(nodeID);
             			if(status==0)
             				System.out.println("Node successfully left the critical region");
-            			else
+            			else if(status==1)
             				System.out.println("Node still waiting in the queue for critical region");
-				else
-					System.out.println("Node not present in the queue");
+            			else
+            				System.out.println("Node not present in the queue");
 	            			
 			}else if(commandTokens[0].equals("help"))
 			{
@@ -271,6 +269,20 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     private String getIP() {
         return this.nodeIP;
     }
+
+
+	@Override
+	public HashMap<Integer, String> remoteInsertNode(int nodeID, String nodeIP) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public int getCoordinatorID() {
+		
+		return this.coordinatorID;
+	}
 
 
 	
