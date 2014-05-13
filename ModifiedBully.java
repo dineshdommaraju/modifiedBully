@@ -57,9 +57,42 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
         
     }
 
+     public boolean remoteAccess(int nodeID) throws RemoteException
+    {
+    	if(criticalSectionAvailable)
+    	{
+    		//Add it to the queue
+    		currentCriticalSectionNode=nodeID;
+    		criticalSectionAvailable=false;
+    		return true;
+    		
+    	}else{
+    		criticalSectionQueue.add(nodeID);
+    		return false;
+    	}
+    }
     
+    public int remoteLeave(int nodeID) throws RemoteException
+    {
+    	if(currentCriticalSectionNode==nodeID)
+    	{
+    		if(criticalSectionQueue.size() > 0)
+    		{
+    			currentCriticalSectionNode=criticalSectionQueue.at(0);
+    			criticalSectionQueue.remove(0);
+    		}else{
+    			criticalSectionAvailable=true;
+    		}
+    		return 0; //Leave successfully executed
+    		
+    	}else if(criticalSectionQueue.contains(nodeID)){
+    		return 1 // Node is waiting in the queue
+    	}else{
+    		return 2;//Node is not present in the queue
+    	}
+    }
     //A new client joining the network
-    public void join(String IP, int port, int nodeID) throws AccessException, RemoteException, NotBoundException{
+      public void join(String IP, int port, int nodeID) throws AccessException, RemoteException, NotBoundException, UnknownHostException, AlreadyBoundException{
     	
     	intializeNode(nodeID,portNumber);
     	isCoordinator=false;
@@ -198,10 +231,30 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
 				
 			}else if(commandTokens[0].equals("request"))
 			{
+				String nodeValue = this.nodeInfo.get(node);
+        			String[] nodeIpPort = nodeValue.split("|");
+        			Registry aRegistry = LocateRegistry.getRegistry(nodeIpPort[0], Integer.parseInt(nodeIpPort[1]));
+            			RemoteInterface aNode = (RemoteInterface)aRegistry.lookup(""+node);
+            			if(aNode.remoteAccess(nodeID))
+            				System.out.println("Node entered critical section");
+				else
+					System.out.println("Node waiting in the queue");
+            			
 				
 			}else if(commandTokens[0].equals("leave"))
 			{
-				
+				String nodeValue = this.nodeInfo.get(node);
+        			String[] nodeIpPort = nodeValue.split("|");
+        			Registry aRegistry = LocateRegistry.getRegistry(nodeIpPort[0], Integer.parseInt(nodeIpPort[1]));
+            			RemoteInterface aNode = (RemoteInterface)aRegistry.lookup(""+node);
+            			int status=aNode.remoteLeave(nodeID);
+            			if(status==0)
+            				System.out.println("Node successfully left the critical region");
+            			else
+            				System.out.println("Node still waiting in the queue for critical region");
+				else
+					System.out.println("Node not present in the queue");
+	            			
 			}else if(commandTokens[0].equals("help"))
 			{
 				
