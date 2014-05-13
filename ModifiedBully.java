@@ -1,3 +1,5 @@
+package modifiedBully1;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -22,18 +24,15 @@ import java.util.Scanner;
 public class ModifiedBully extends UnicastRemoteObject implements RemoteInterface {
 
 	private static final long serialVersionUID = 1L;
-	int portNumber;			//Node's port
+	int portNumber;					//Node's port
     int nodeID;						//Node's ID
     String nodeIP;					//Node's IP
     int timeOut;					//To set the time out for every request
     
     int currentCriticalSectionNode;	//Node which is using the critical section
     ArrayList<Integer> criticalSectionQueue;	//Nodes which are waiting to enter CS
-
     int coordinatorID;				//Current coordinator
-
     Registry registry;				//Common Registry
-
     boolean isCoordinator;    // Yes - If this node is the coordinator; No - otherwise
     boolean criticalSectionAvailable = true;	//Is CS Available or not
     boolean electionFlag=false;			//State of the election
@@ -42,7 +41,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     
     int incomingMessageCount;
    
-
+    /*
     ModifiedBully(String id, int coordId, String coordIP)
             throws AlreadyBoundException, RemoteException, UnknownHostException {
         //this.portNumber = portNumber;
@@ -58,11 +57,12 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
         
         System.setProperty("sun.rmi.transport.proxy.connectTimeout", "1000");
  
-    }
+    }*/
 
     public void setupConnection() throws RemoteException, AlreadyBoundException {
-        registry = LocateRegistry.createRegistry(portNumber);
+    	registry = LocateRegistry.createRegistry(portNumber);
         registry.bind("" + this.nodeID,this);
+        
     }
     
     //Initiating Election
@@ -185,11 +185,43 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
 		
 	}
 
-    void remoteBroadcastNewNodeID() throws RemoteException {
-
-    }
-
+	void userPromt() throws IOException
+	{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		while(true)
+		{
+			String command=br.readLine();
+			String[] commandTokens=command.split(" ");
+			if(commandTokens[0].equals("join"))
+			{
+				
+			}else if(commandTokens[0].equals("request"))
+			{
+				
+			}else if(commandTokens[0].equals("leave"))
+			{
+				
+			}else if(commandTokens[0].equals("help"))
+			{
+				
+			}else{
+				System.out.println("Wrong command!.Type help for list of commands");
+			}
+		}
+		
+		
+		
+			
+		
+		
+	}
     public static void main(String[] args) throws AlreadyBoundException, IOException, NotBoundException {
+    	
+    	
+    	ModifiedBully obj=new ModifiedBully();
+    	obj.userPromt();
+    	
+    	/*
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         System.out.print("Hey! I'm a new node.. Let's set me up!");
       //  System.out.print("Enter the portNumber number: ");
@@ -210,6 +242,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
 
         System.out.println("\nI'm up and running at " + aBully.getIP() +
                 " and listening at 5000");
+        */
     }
 
     private String getIP() {
