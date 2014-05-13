@@ -1,8 +1,6 @@
 
 package modifiedBully;
 
-
-
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -16,5 +14,7 @@ public interface RemoteInterface extends Remote{
 	void remoteBroadcastNewNodeInfo(String IP, int port, int nodeID) throws RemoteException;
 	void remoteBroadcastCoordinatorNodeID(int nodeID) throws RemoteException;
 	public int getCoordinatorID();
+	public HashMap<Integer, String> remoteInsertNode(int nodeID, String nodeIP);
 }
+
 
