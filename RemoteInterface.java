@@ -7,16 +7,16 @@ import java.util.HashMap;
 
 public interface RemoteInterface extends Remote{
 	
-	public boolean remoteAccess(int nodeID) throws RemoteException;
-	public int remoteLeave(int nodeID) throws RemoteException;
+	public boolean remoteAccess(int nodeID) throws RemoteException,NotBoundException;
+	public int remoteLeave(int nodeID) throws RemoteException,NotBoundException;
 	public HashMap<Integer,String> remoteInsertNode(String IP, int port, int nodeID) throws RemoteException, NotBoundException;
-	void remoteInitiateElection(int nodeId) throws RemoteException;
-    void remoteGetElectionResponse(int nodeId) throws RemoteException;
-	void remoteBroadcastNewNodeInfo(String IP, int port, int nodeID) throws RemoteException;
-	void remoteBroadcastCoordinatorNodeID(int nodeID) throws RemoteException;
-	public int remoteGetCoordinatorID();
+	void remoteInitiateElection(int nodeId) throws RemoteException,NotBoundException;
+    void remoteGetElectionResponse(int nodeId) throws RemoteException,NotBoundException;
+	void remoteBroadcastNewNodeInfo(String IP, int port, int nodeID) throws RemoteException,NotBoundException;
+	void remoteBroadcastCoordinatorNodeID(int nodeID) throws RemoteException,NotBoundException;
+	public int remoteGetCoordinatorID() throws RemoteException,NotBoundException;
 	public HashMap<Integer, String> remoteInsertNode(int nodeID, String nodeIP);
-    public void remoteSetCoordinator() throws RemoteException;
+    public void remoteSetCoordinator() throws RemoteException,NotBoundException;
 }
 
 
