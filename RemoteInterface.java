@@ -1,8 +1,5 @@
-<<<<<<< HEAD
+
 package modifiedBully;
-=======
-//package modifiedBully1;
->>>>>>> c82750961cadfce704e9b7b1b72fb7de391c5781
 
 import java.rmi.NotBoundException;
 import java.rmi.Remote;

@@ -19,9 +19,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
-/**
- * Created by Shreyas on 5/1/2014.
- */
+
 public class ModifiedBully extends UnicastRemoteObject implements RemoteInterface {
 
 	private static final long serialVersionUID = 1L;
@@ -85,7 +83,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     	return coordinatorID;
     	
     }
-<<<<<<< HEAD
+
     
     //Get the details of the nodes in the network and updating other nodes with the new node joined
     public HashMap<Integer,String> getDetails(int nodeID, String nodeIP) throws RemoteException, NotBoundException{
@@ -103,72 +101,9 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     	return peerDetails;
     }
     
-    //Other nodes adding the new node joined into their list
-    @Override
-	public void newNodeJoined(int nodeID, String nodeIP) {
-		
-    	this.nodeInfo.put(nodeID, nodeIP);
-		
-	}
     
-    //Giving response to a client which has initiated the election and trying to elect itself 
-    @Override
-	public String giveResponse(String message) throws InterruptedException, NotBoundException, RemoteException {
-		
-    	announceLeader();
-		return "I am alive";
-	
-    }
+   
     
-    //Announcing that the current process is the leader to all the processes
-    public void announceLeader() throws RemoteException, NotBoundException{
-    	nodeInfo.remove(this.coordinatorID);
-    	coordinatorID = nodeID;
-    	coordinator = true;
-    	Registry registry;
-    	RemoteInterface ri;
-    	for(Entry<Integer, String> entry: nodeInfo.entrySet()){
-    		registry = LocateRegistry.getRegistry(""+entry.getValue(),portNumber);
-    		ri = (RemoteInterface)registry.lookup(""+entry.getKey());
-    		ri.announce(nodeID);
-    	}
-    }
-  
-    //Change the coordinator id and remove the previous coordinator from the coordinator list
-    public void announce(String node){
-    	nodeInfo.remove(this.coordinatorID);
-    	this.coordinatorID = node;
-
-    }
-    
-    //A client trying to access critical section
-    public void accessCriticalSection() throws RemoteException, NotBoundException, InterruptedException{
-    	Registry registry = LocateRegistry.getRegistry(nodeInfo.get(coordinatorID), portNumber);
-    	RemoteInterface ri = (RemoteInterface) registry.lookup(coordinatorID);
-    	ri.givePermission(this.nodeID);
-    	ri.accessCS();
-    }
-    
-    //Remote Method to give access to critical section
-	@Override
-	public boolean givePermission(String nodeID) throws InterruptedException {
-		
-		while(criticalSectionInUse){
-			wait();
-		}
-		criticalSectionInUse = true;
-		return true;
-	}
-	
-	//Process accessing critical section after getting the permission from the coordinator
-	@Override
-	public void accessCS() throws InterruptedException {
-		
-		Thread.sleep(1000);
-		criticalSectionInUse = false;
-		
-	}
-
     public HashMap<Integer,String> remoteInsertNode(String IP, int port, int nodeID) throws RemoteException {
         HashMap<Integer, String> returnInfo = this.nodeInfo;
         this.nodeInfo.put(nodeID, IP + "|" + port);
