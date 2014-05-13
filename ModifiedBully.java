@@ -62,7 +62,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     	
     	registry = LocateRegistry.getRegistry(IP,port);	//Connecting to the given host
     	RemoteInterface ri = (RemoteInterface)registry.lookup(""+nodeID);	//Looking for the nodeId in the registry
-    	this.nodeInfo = ri.getDetails(this.nodeID,this.nodeIP);	//Getting all the info from the node and copying to the current new node
+    	this.nodeInfo = ri.remoteInsertNode(this.nodeID,this.nodeIP);	//Getting all the info from the node and copying to the current new node
     	this.coordinatorID = ri.getCoordinatorID();		//Getting the coordinator id
     	
     }
