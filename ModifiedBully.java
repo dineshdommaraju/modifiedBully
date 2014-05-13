@@ -185,6 +185,10 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
 		
 	}
 
+    void remoteBroadcastNewNodeID() {
+
+    }
+
     public static void main(String[] args) throws AlreadyBoundException, IOException, NotBoundException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         System.out.print("Hey! I'm a new node.. Let's set me up!");
