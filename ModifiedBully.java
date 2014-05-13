@@ -55,7 +55,34 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
         
     }
 
+     public boolean remoteAccess(int nodeID) throws RemoteException
+    {
+    	if(criticalSectionAvailable)
+    	{
+    		//Add it to the queue
+    		currentCriticalSectionNode=nodeID;
+    		criticalSectionAvailable=false;
+    		return true;
+    		
+    	}else{
+    		criticalSectionQueue.add(nodeID);
+    		return false;
+    	}
+    }
     
+    public int remoteLeave(int nodeID) throws RemoteException
+    {
+    	if(currentCriticalSectionNode==nodeID)
+    	{
+    		criticalSectionAvailable=true;
+    		return 0;
+    		
+    	}else if(criticalSectionQueue.contains(nodeID)){
+    		return 1;
+    	}else{
+    		return 2;
+    	}
+    }
     //A new client joining the network
       public void join(String IP, int port, int nodeID) throws AccessException, RemoteException, NotBoundException, UnknownHostException, AlreadyBoundException{
     	
