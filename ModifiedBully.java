@@ -59,6 +59,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     //A new client joining the network
     public void join(String IP, int port, int nodeID) throws AccessException, RemoteException, NotBoundException{
     	
+    	intializeNode(nodeID,portNumber);
     	isCoordinator=false;
     	registry = LocateRegistry.getRegistry(IP,port);	//Connecting to the given host
     	RemoteInterface ri = (RemoteInterface)registry.lookup(""+nodeID);	//Looking for the nodeId in the registry
