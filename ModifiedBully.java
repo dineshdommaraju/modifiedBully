@@ -236,6 +236,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
 					join(Integer.parseInt(commandTokens[1]));
 				}else if(commandTokens.length==3)
 				{
+					//Format: IPAddress,Port Number, NodeID
 					join(commandTokens[2],Integer.parseInt(commandTokens[3]),Integer.parseInt(commandTokens[1]));
 				}
 				
