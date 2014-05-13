@@ -156,6 +156,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     public void remoteInitiateElection(int nodeId) throws RemoteException {
         this.electionFlag = true;
         this.coordinatorID = 0;
+        this.incomingMessageCount++;
         if(this.nodeID > nodeId) {
             String[] nodeValues = this.nodeInfo.get(nodeId).split("|");
             Registry registry = LocateRegistry.getRegistry(nodeValues[0], Integer.parseInt(nodeValues[1]));
@@ -165,6 +166,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     }
 
     public void remoteGetElectionResponse(int nodeId) throws RemoteException {
+        this.incomingMessageCount++;
         if(this.coordinatorID < nodeId) {
             this.coordinatorID = nodeId;
         }
