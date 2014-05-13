@@ -22,7 +22,7 @@ import java.util.Scanner;
 public class ModifiedBully extends UnicastRemoteObject implements RemoteInterface {
 
 	private static final long serialVersionUID = 1L;
-	int portNumber=5000;			//Node's port
+	int portNumber;			//Node's port
     int nodeID;						//Node's ID
     String nodeIP;					//Node's IP
     int timeOut;					//To set the time out for every request
