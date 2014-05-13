@@ -66,14 +66,29 @@
       <file leaf-file-name="ModifiedBully.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ModifiedBully.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.9141414" vertical-offset="2279" max-vertical-offset="5219">
-              <caret line="166" column="36" selection-start-line="166" selection-start-column="36" selection-end-line="166" selection-end-column="36" />
+            <state vertical-scroll-proportion="-0.8013468" vertical-offset="1122" max-vertical-offset="5134">
+              <caret line="38" column="72" selection-start-line="38" selection-start-column="72" selection-end-line="38" selection-end-column="72" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#3927#3928#0" expanded="true" />
-                <element signature="e#3960#3961#0" expanded="true" />
-                <element signature="e#10549#10550#0" expanded="true" />
-                <element signature="e#10583#10584#0" expanded="true" />
+                <element signature="e#590#591#0" expanded="true" />
+                <element signature="e#604#605#0" expanded="true" />
+                <element signature="e#3898#3899#0" expanded="true" />
+                <element signature="e#3931#3932#0" expanded="true" />
+                <element signature="e#10520#10521#0" expanded="true" />
+                <element signature="e#10554#10555#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TraditionalBully.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/TraditionalBully.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4896">
+              <caret line="38" column="72" selection-start-line="38" selection-start-column="72" selection-end-line="38" selection-end-column="72" />
+              <folding>
+                <element signature="e#596#597#0" expanded="true" />
+                <element signature="e#610#611#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -106,6 +121,7 @@
       <list>
         <option value="$PROJECT_DIR$/RemoteInteface.java" />
         <option value="$PROJECT_DIR$/RemoteInterface.java" />
+        <option value="$PROJECT_DIR$/TraditionalBully.java" />
         <option value="$PROJECT_DIR$/ModifiedBully.java" />
       </list>
     </option>
@@ -386,16 +402,29 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/TraditionalBully.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4896">
+          <caret line="38" column="72" selection-start-line="38" selection-start-column="72" selection-end-line="38" selection-end-column="72" />
+          <folding>
+            <element signature="e#596#597#0" expanded="true" />
+            <element signature="e#610#611#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/ModifiedBully.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.9141414" vertical-offset="2279" max-vertical-offset="5219">
-          <caret line="166" column="36" selection-start-line="166" selection-start-column="36" selection-end-line="166" selection-end-column="36" />
+        <state vertical-scroll-proportion="-0.8013468" vertical-offset="1122" max-vertical-offset="5134">
+          <caret line="38" column="72" selection-start-line="38" selection-start-column="72" selection-end-line="38" selection-end-column="72" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3927#3928#0" expanded="true" />
-            <element signature="e#3960#3961#0" expanded="true" />
-            <element signature="e#10549#10550#0" expanded="true" />
-            <element signature="e#10583#10584#0" expanded="true" />
+            <element signature="e#590#591#0" expanded="true" />
+            <element signature="e#604#605#0" expanded="true" />
+            <element signature="e#3898#3899#0" expanded="true" />
+            <element signature="e#3931#3932#0" expanded="true" />
+            <element signature="e#10520#10521#0" expanded="true" />
+            <element signature="e#10554#10555#0" expanded="true" />
           </folding>
         </state>
       </provider>
