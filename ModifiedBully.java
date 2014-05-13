@@ -10,6 +10,8 @@ import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.*;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,7 +36,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     Registry registry;				//Common Registry
     boolean isCoordinator;    // Yes - If this node is the coordinator; No - otherwise
     boolean criticalSectionAvailable = true;	//Is CS Available or not
-    boolean electionFlag=false;			//State of the election
+    boolean electionFlag = false;			//State of the election
 
     HashMap<Integer,String> nodeInfo; // Key - "NodeID" ::: Value - "IP;portNumber"
     
@@ -79,17 +81,61 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     }
     
     //Returning the coordinator
-    public int getCoordinatorID(){
-    	
+    public int remoteGetCoordinatorID(){
     	return coordinatorID;
-    	
     }
 
-    
-    
-    
-    
-   
+    public void initiateElection() {
+        if(!this.electionFlag) {
+            this.coordinatorID = 0;
+            this.electionFlag = true;
+
+            ArrayList<Integer> nodeIDs = new ArrayList<Integer>(this.nodeInfo.keySet());
+            for(int node : nodeIDs ) {
+                if(node > this.nodeID) {
+                    String nodeValue = this.nodeInfo.get(node);
+                    String[] nodeIpPort = nodeValue.split("|");
+                    Registry aRegistry = LocateRegistry.getRegistry(nodeIpPort[0], Integer.parseInt(nodeIpPort[1]));
+                    RemoteInterface aNode = (RemoteInterface) aRegistry.lookup("" + node);
+                    aNode.remoteInitiateElection(this.nodeID);
+                }
+            }
+
+            if(this.coordinatorID == 0) {
+                this.isCoordinator = true;
+                this.electionFlag = false;
+                this.broadcastCoordinatorNodeID();
+            }
+            else {
+                String[] nodeValues = this.nodeInfo.get(this.coordinatorID).split("|");
+                Registry registry = LocateRegistry.getRegistry(nodeValues[0], Integer.parseInt(nodeValues[1]));
+                RemoteInterface node = (RemoteInterface) registry.lookup(nodeId);
+                node.remoteSetCoordinator();
+            }
+        }
+    }
+
+    public void remoteSetCoordinator() throws RemoteException {
+        this.electionFlag = false;
+        this.initiateElection();
+    }
+
+    public void remoteInitiateElection(int nodeId) throws RemoteException {
+        this.electionFlag = true;
+        this.coordinatorID = 0;
+        if(this.nodeID > nodeId) {
+            String[] nodeValues = this.nodeInfo.get(nodeId).split("|");
+            Registry registry = LocateRegistry.getRegistry(nodeValues[0], Integer.parseInt(nodeValues[1]));
+            RemoteInterface node = (RemoteInterface)registry.lookup(nodeId);
+            node.remoteGetElectionResponse(this.nodeID);
+        }
+    }
+
+    public void remoteGetElectionResponse(int nodeId) throws RemoteException {
+        if(this.coordinatorID < nodeId) {
+            this.coordinatorID = nodeId;
+        }
+    }
     
     public HashMap<Integer,String> remoteInsertNode(String IP, int port, int nodeID) throws RemoteException, NotBoundException {
         HashMap<Integer, String> returnInfo = this.nodeInfo;
