@@ -9,9 +9,11 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.*;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 
 /**
@@ -20,32 +22,36 @@ import java.util.Scanner;
 public class ModifiedBully extends UnicastRemoteObject implements RemoteInterface {
 
 	private static final long serialVersionUID = 1L;
-	int port=5000;
-    String nodeID;
-    String nodeIP;
+	int portNumber=5000;			//Node's port
+    int nodeID;						//Node's ID
+    String nodeIP;					//Node's IP
+    int timeOut;					//To set the time out for every request
+    
+    int currentCriticalSectionNode;	//Node which is using the critical section
+    ArrayList<Integer> criticalSectionQueue;	//Nodes which are waiting to enter CS
 
-    int coordinatorID;
+    int coordinatorID;				//Current coordinator
 
-    Registry registry;
+    Registry registry;				//Common Registry
 
     boolean isCoordinator;    // Yes - If this node is the coordinator; No - otherwise
-    boolean criticalSectionAvailable = true;
+    boolean criticalSectionAvailable = true;	//Is CS Available or not
+    boolean electionFlag=false;			//State of the election
 
-    HashMap<Integer,String> peers; // Key - "NodeID" ::: Value - "IP;Port"
+    HashMap<Integer,String> nodeInfo; // Key - "NodeID" ::: Value - "IP;portNumber"
     
-    //String myBiggestID;
-    //String bigIP;
-    
+    int incomingMessageCount;
+   
 
     ModifiedBully(String id, int coordId, String coordIP)
             throws AlreadyBoundException, RemoteException, UnknownHostException {
-        //this.port = port;
+        //this.portNumber = portNumber;
         this.nodeID = id;
         this.nodeIP = InetAddress.getLocalHost().toString();
 
         this.coordinatorID = coordId;
 
-        peers.put(coordId,coordIP);
+        nodeInfo.put(coordId,coordIP);
         this.isCoordinator = false;
 
         this.setupConnection();
@@ -55,7 +61,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     }
 
     public void setupConnection() throws RemoteException, AlreadyBoundException {
-        registry = LocateRegistry.createRegistry(port);
+        registry = LocateRegistry.createRegistry(portNumber);
         registry.bind("" + this.nodeID,this);
     }
     
@@ -64,7 +70,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     	try{
     		String message = "Coordinator down";
     	
-    	Registry registry = LocateRegistry.getRegistry(bigIP,port);
+    	Registry registry = LocateRegistry.getRegistry(bigIP,portNumber);
     	RemoteInterface ri = (RemoteInterface)registry.lookup(myBiggestID);
     	String response = ri.giveResponse(message);
     	if(response.equals("I am alive")){
@@ -86,7 +92,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     	String node = sc.next();
     	Registry registry = LocateRegistry.getRegistry(ip,5000);
     	RemoteInterface ri = (RemoteInterface)registry.lookup(node);
-    	this.peers = ri.getDetails(this.nodeID,this.nodeIP);
+    	this.nodeInfo = ri.getDetails(this.nodeID,this.nodeIP);
     	this.coordinatorID = ri.getCoordinatorID();
     	
     }
@@ -103,13 +109,13 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     	
     	Registry registry;
     	RemoteInterface ri;
-    	for(Map.Entry<String,String> entry: peers.entrySet()){
-    		registry = LocateRegistry.getRegistry(""+entry.getValue(),port);
+    	for(Map.Entry<String,String> entry: nodeInfo.entrySet()){
+    		registry = LocateRegistry.getRegistry(""+entry.getValue(),portNumber);
     		ri = (RemoteInterface)registry.lookup(""+entry.getKey());
     		ri.newNodeJoined(nodeID,nodeIP);
     	}
-    	Hashtable<String,String> peerDetails =  this.peers;
-    	this.peers.put(nodeID, nodeIP);
+    	Hashtable<String,String> peerDetails =  this.nodeInfo;
+    	this.nodeInfo.put(nodeID, nodeIP);
     	return peerDetails;
     }
     
@@ -117,7 +123,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     @Override
 	public void newNodeJoined(String nodeID, String nodeIP) {
 		
-    	this.peers.put(nodeID,nodeIP);
+    	this.nodeInfo.put(nodeID,nodeIP);
 		
 	}
     
@@ -132,13 +138,13 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     
     //Announcing that the current process is the leader to all the processes
     public void announceLeader() throws RemoteException, NotBoundException{
-    	peers.remove(this.coordinatorID);
+    	nodeInfo.remove(this.coordinatorID);
     	coordinatorID = nodeID;
     	coordinator = true;
     	Registry registry;
     	RemoteInterface ri;
-    	for(Map.Entry<String,String> entry: peers.entrySet()){
-    		registry = LocateRegistry.getRegistry(""+entry.getValue(),port);
+    	for(Entry<Integer, String> entry: nodeInfo.entrySet()){
+    		registry = LocateRegistry.getRegistry(""+entry.getValue(),portNumber);
     		ri = (RemoteInterface)registry.lookup(""+entry.getKey());
     		ri.announce(nodeID);
     	}
@@ -146,14 +152,14 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
   
     //Change the coordinator id and remove the previous coordinator from the coordinator list
     public void announce(String node){
-    	peers.remove(this.coordinatorID);
+    	nodeInfo.remove(this.coordinatorID);
     	this.coordinatorID = node;
 
     }
     
     //A client trying to access critical section
     public void accessCriticalSection() throws RemoteException, NotBoundException, InterruptedException{
-    	Registry registry = LocateRegistry.getRegistry(peers.get(coordinatorID), port);
+    	Registry registry = LocateRegistry.getRegistry(nodeInfo.get(coordinatorID), portNumber);
     	RemoteInterface ri = (RemoteInterface) registry.lookup(coordinatorID);
     	ri.givePermission(this.nodeID);
     	ri.accessCS();
@@ -182,8 +188,8 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     public static void main(String[] args) throws AlreadyBoundException, IOException, NotBoundException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         System.out.print("Hey! I'm a new node.. Let's set me up!");
-      //  System.out.print("Enter the port number: ");
-        //int port = br.read();
+      //  System.out.print("Enter the portNumber number: ");
+        //int portNumber = br.read();
 
         System.out.print("Enter the node ID: ");
         String nodeID = br.readLine();
@@ -192,7 +198,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
         String coordnodeId = br.readLine();
         System.out.print("\nEnter the IP address of the coordinator: ");
         String coordinatorIP = br.readLine();
-       // System.out.print("\nEnter the port number of the coordinator");
+       // System.out.print("\nEnter the portNumber number of the coordinator");
         //String coordinatorPort = br.readLine();
 
         Bully aBully = new Bully(nodeID, coordnodeId, coordinatorIP);
