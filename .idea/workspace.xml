@@ -80,8 +80,8 @@
       <file leaf-file-name="RemoteInteface.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/RemoteInteface.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.2800659" vertical-offset="0" max-vertical-offset="607">
-              <caret line="10" column="35" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="35" />
+            <state vertical-scroll-proportion="0.22405271" vertical-offset="0" max-vertical-offset="607">
+              <caret line="8" column="76" selection-start-line="8" selection-start-column="76" selection-end-line="8" selection-end-column="76" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -272,6 +272,9 @@
     </configuration>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="4bb9138e-e869-4cea-9c7b-59b1ef752f03" name="Default" comment="" />
@@ -343,8 +346,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/RemoteInteface.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2800659" vertical-offset="0" max-vertical-offset="607">
-          <caret line="10" column="35" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="35" />
+        <state vertical-scroll-proportion="0.22405271" vertical-offset="0" max-vertical-offset="607">
+          <caret line="8" column="76" selection-start-line="8" selection-start-column="76" selection-end-line="8" selection-end-column="76" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

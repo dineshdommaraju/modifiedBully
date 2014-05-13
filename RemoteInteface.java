@@ -6,7 +6,7 @@ import java.util.Hashtable;
 
 public interface RemoteInterface extends Remote{
 	
-	public HashMap<Integer,String> remoteInsertNode(String IP,Integer port, Integer nodeID);
+	public HashMap<Integer,String> remoteInsertNode(String IP, int port, int nodeID);
 	void remoteInitiateElection();
 	void remoteBroadcastNewNodeInfo(String IP,int port, int nodeID);
 	void remoteBroadcastCoordinatorNodeID(int port);
