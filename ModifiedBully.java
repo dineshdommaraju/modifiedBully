@@ -185,7 +185,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
 		
 	}
 
-    void remoteBroadcastNewNodeID() {
+    void remoteBroadcastNewNodeID() throws RemoteException {
 
     }
 
