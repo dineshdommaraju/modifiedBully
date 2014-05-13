@@ -1,4 +1,4 @@
-package modifiedBully1;
+package modifiedBully;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -194,6 +194,14 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
 			String[] commandTokens=command.split(" ");
 			if(commandTokens[0].equals("join"))
 			{
+				if(commandTokens.length ==1)
+				{
+					
+					join();
+				}else if(commandTokens.length==3)
+				{
+					join()
+				}
 				
 			}else if(commandTokens[0].equals("request"))
 			{

@@ -1,4 +1,4 @@
-package modifiedBully1;
+package modifiedBully;
 
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
