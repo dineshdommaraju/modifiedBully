@@ -78,7 +78,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     	{
     		if(criticalSectionQueue.size() > 0)
     		{
-    			currentCriticalSectionNode=criticalSectionQueue.at(0);
+    			currentCriticalSectionNode=criticalSectionQueue.get(0);
     			criticalSectionQueue.remove(0);
     		}else{
     			criticalSectionAvailable=true;
@@ -86,7 +86,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     		return 0; //Leave successfully executed
     		
     	}else if(criticalSectionQueue.contains(nodeID)){
-    		return 1 // Node is waiting in the queue
+    		return 1; // Node is waiting in the queue
     	}else{
     		return 2;//Node is not present in the queue
     	}
@@ -98,7 +98,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     	isCoordinator=false;
     	registry = LocateRegistry.getRegistry(IP,port);	//Connecting to the given host
     	RemoteInterface ri = (RemoteInterface)registry.lookup(""+nodeID);	//Looking for the nodeId in the registry
-    	this.nodeInfo = ri.remoteInsertNode(this.nodeID,this.nodeIP);	//Getting all the info from the node and copying to the current new node
+    	this.nodeInfo = ri.remoteInsertNode(this.nodeIP,this.portNumber,this.nodeID);	//Getting all the info from the node and copying to the current new node
     	this.coordinatorID = ri.getCoordinatorID();		//Getting the coordinator id
     	
     }
@@ -118,7 +118,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     	return coordinatorID;
     }
 
-    public void initiateElection() {
+    public void initiateElection() throws AccessException, RemoteException, NotBoundException {
         if(!this.electionFlag) {
             this.coordinatorID = 0;
             this.electionFlag = true;
@@ -142,31 +142,29 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
             else {
                 String[] nodeValues = this.nodeInfo.get(this.coordinatorID).split("|");
                 Registry registry = LocateRegistry.getRegistry(nodeValues[0], Integer.parseInt(nodeValues[1]));
-                RemoteInterface node = (RemoteInterface) registry.lookup(nodeId);
+                RemoteInterface node = (RemoteInterface) registry.lookup(""+nodeID);
                 node.remoteSetCoordinator();
             }
         }
     }
 
-    public void remoteSetCoordinator() throws RemoteException {
+    public void remoteSetCoordinator() throws RemoteException, NotBoundException {
         this.electionFlag = false;
         this.initiateElection();
     }
 
-    public void remoteInitiateElection(int nodeId) throws RemoteException {
+    public void remoteInitiateElection(int nodeId) throws RemoteException, NotBoundException {
         this.electionFlag = true;
         this.coordinatorID = 0;
-        this.incomingMessageCount++;
         if(this.nodeID > nodeId) {
             String[] nodeValues = this.nodeInfo.get(nodeId).split("|");
             Registry registry = LocateRegistry.getRegistry(nodeValues[0], Integer.parseInt(nodeValues[1]));
-            RemoteInterface node = (RemoteInterface)registry.lookup(nodeId);
+            RemoteInterface node = (RemoteInterface)registry.lookup(""+nodeId);
             node.remoteGetElectionResponse(this.nodeID);
         }
     }
 
     public void remoteGetElectionResponse(int nodeId) throws RemoteException {
-        this.incomingMessageCount++;
         if(this.coordinatorID < nodeId) {
             this.coordinatorID = nodeId;
         }
@@ -233,10 +231,10 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
 				
 			}else if(commandTokens[0].equals("request"))
 			{
-				String nodeValue = this.nodeInfo.get(node);
+				String nodeValue = this.nodeInfo.get(coordinatorID);
         			String[] nodeIpPort = nodeValue.split("|");
         			Registry aRegistry = LocateRegistry.getRegistry(nodeIpPort[0], Integer.parseInt(nodeIpPort[1]));
-            			RemoteInterface aNode = (RemoteInterface)aRegistry.lookup(""+node);
+            			RemoteInterface aNode = (RemoteInterface)aRegistry.lookup(""+coordinatorID);
             			if(aNode.remoteAccess(nodeID))
             				System.out.println("Node entered critical section");
 				else
@@ -245,10 +243,10 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
 				
 			}else if(commandTokens[0].equals("leave"))
 			{
-				String nodeValue = this.nodeInfo.get(node);
+				String nodeValue = this.nodeInfo.get(coordinatorID);
         			String[] nodeIpPort = nodeValue.split("|");
         			Registry aRegistry = LocateRegistry.getRegistry(nodeIpPort[0], Integer.parseInt(nodeIpPort[1]));
-            			RemoteInterface aNode = (RemoteInterface)aRegistry.lookup(""+node);
+            			RemoteInterface aNode = (RemoteInterface)aRegistry.lookup(""+coordinatorID);
             			int status=aNode.remoteLeave(nodeID);
             			if(status==0)
             				System.out.println("Node successfully left the critical region");
@@ -275,19 +273,10 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     }
 
 
-	@Override
-	public void remoteInitiateElection() throws RemoteException {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 
-	@Override
-	public HashMap<Integer, String> remoteInsertNode(int nodeID, String nodeIP) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	
 
 	
