@@ -74,7 +74,13 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     {
     	if(currentCriticalSectionNode==nodeID)
     	{
-    		criticalSectionAvailable=true;
+    		if(criticalSectionQueue.size() > 0)
+    		{
+    			currentCriticalSectionNode=criticalSectionQueue.at(0);
+    			criticalSectionQueue.remove(0);
+    		}else{
+    			criticalSectionAvailable=true;
+    		}
     		return 0; //Leave successfully executed
     		
     	}else if(criticalSectionQueue.contains(nodeID)){
