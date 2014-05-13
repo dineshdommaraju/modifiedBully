@@ -20,8 +20,8 @@ public class TraditionalBully extends UnicastRemoteObject implements RemoteInter
 
 	protected TraditionalBully() throws RemoteException {
 		super();
-		
 	}
+
 	private static final long serialVersionUID = 1L;
 	int portNumber;					//Node's port
     int nodeID;						//Node's ID
@@ -36,7 +36,7 @@ public class TraditionalBully extends UnicastRemoteObject implements RemoteInter
     boolean criticalSectionAvailable = true;	//Is CS Available or not
     boolean electionFlag = false;			//State of the election
 
-    HashMap<Integer,String> nodeInfo; // Key - "NodeID" ::: Value - "IP;portNumber"
+    HashMap<Integer,String> nodeInfo; // Key - "NodeID" ::: Value - "IP|portNumber"
     
     int incomingMessageCount;
     
@@ -90,8 +90,7 @@ public class TraditionalBully extends UnicastRemoteObject implements RemoteInter
     	}
     }
     //A new client joining the network
-      public void join(String IP, int port, int nodeID) throws AccessException, RemoteException, NotBoundException, UnknownHostException, AlreadyBoundException{
-    	
+      public void join(String IP, int port, int nodeID) throws AccessException, RemoteException, NotBoundException, UnknownHostException, AlreadyBoundException {
     	intializeNode(nodeID,portNumber);
     	isCoordinator=false;
     	registry = LocateRegistry.getRegistry(IP,port);	//Connecting to the given host
@@ -104,7 +103,6 @@ public class TraditionalBully extends UnicastRemoteObject implements RemoteInter
     
     //If the new client is the first client
     public void join(int nodeID, int portNumber) throws UnknownHostException, RemoteException, AlreadyBoundException{
-    	
     	intializeNode(nodeID,portNumber);
     	this.coordinatorID=nodeID;	//Updating the coordinator as itself
     	isCoordinator=true;

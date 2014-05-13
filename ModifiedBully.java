@@ -20,8 +20,8 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
 
 	protected ModifiedBully() throws RemoteException {
 		super();
-		
 	}
+
 	private static final long serialVersionUID = 1L;
 	int portNumber;					//Node's port
     int nodeID;						//Node's ID
@@ -36,12 +36,11 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     boolean criticalSectionAvailable = true;	//Is CS Available or not
     boolean electionFlag = false;			//State of the election
 
-    HashMap<Integer,String> nodeInfo; // Key - "NodeID" ::: Value - "IP;portNumber"
+    HashMap<Integer,String> nodeInfo; // Key - "NodeID" ::: Value - "IP|portNumber"
     
     int incomingMessageCount;
     
-    void intializeNode(int nodeID,int portNumber) throws UnknownHostException, RemoteException, AlreadyBoundException
-    {
+    void intializeNode(int nodeID,int portNumber) throws UnknownHostException, RemoteException, AlreadyBoundException {
     	this.portNumber=portNumber;
     	this.nodeID = nodeID;
         this.nodeIP = InetAddress.getLocalHost().toString();
@@ -52,26 +51,22 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     public void setupConnection() throws RemoteException, AlreadyBoundException {
     	registry = LocateRegistry.createRegistry(portNumber);
         registry.bind("" + this.nodeID,this);
-        
     }
 
      public boolean remoteAccess(int nodeID) throws RemoteException
     {
-    	if(criticalSectionAvailable)
-    	{
+    	if(criticalSectionAvailable) {
     		//Add it to the queue
     		currentCriticalSectionNode=nodeID;
     		criticalSectionAvailable=false;
     		return true;
-    		
-    	}else{
+    	} else {
     		criticalSectionQueue.add(nodeID);
     		return false;
     	}
     }
     
-    public int remoteLeave(int nodeID) throws RemoteException
-    {
+    public int remoteLeave(int nodeID) throws RemoteException {
     	if(currentCriticalSectionNode==nodeID)
     	{
     		if(criticalSectionQueue.size() > 0)
