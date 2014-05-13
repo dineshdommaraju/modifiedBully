@@ -1,4 +1,3 @@
-package modifiedBully;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,14 +13,15 @@ import java.rmi.registry.*;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Scanner;
+
 
 
 public class ModifiedBully extends UnicastRemoteObject implements RemoteInterface {
 
+	protected ModifiedBully() throws RemoteException {
+		super();
+		
+	}
 	private static final long serialVersionUID = 1L;
 	int portNumber;					//Node's port
     int nodeID;						//Node's ID
@@ -40,7 +40,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     
     int incomingMessageCount;
     
-    void intializeNode(int nodeID,int portNumber)
+    void intializeNode(int nodeID,int portNumber) throws UnknownHostException, RemoteException, AlreadyBoundException
     {
     	this.portNumber=portNumber;
     	this.nodeID = nodeID;
@@ -69,7 +69,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     
     
     //If the new client is the first client
-    public void join(int nodeID, int portNumber){
+    public void join(int nodeID, int portNumber) throws UnknownHostException, RemoteException, AlreadyBoundException{
     	
     	intializeNode(nodeID,portNumber);
     	this.coordinatorID=nodeID;	//Updating the coordinator as itself
@@ -90,14 +90,14 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     
    
     
-    public HashMap<Integer,String> remoteInsertNode(String IP, int port, int nodeID) throws RemoteException {
+    public HashMap<Integer,String> remoteInsertNode(String IP, int port, int nodeID) throws RemoteException, NotBoundException {
         HashMap<Integer, String> returnInfo = this.nodeInfo;
         this.nodeInfo.put(nodeID, IP + "|" + port);
         this.broadcastNewNodeInfo(IP,port,nodeID);
         return returnInfo;
     }
 
-    void broadcastNewNodeInfo(String IP, int port, int nodeID) throws NotBoundException {
+    void broadcastNewNodeInfo(String IP, int port, int nodeID) throws NotBoundException, NumberFormatException, RemoteException {
         ArrayList<Integer> nodeIDs = new ArrayList<Integer>(this.nodeInfo.keySet());
         for(int node : nodeIDs ) {
             String nodeValue = this.nodeInfo.get(node);
@@ -112,7 +112,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
         this.nodeInfo.put(nodeID,IP + "|" + port);
     }
 
-    void broadcastCoordinatorNodeID() throws NotBoundException {
+    void broadcastCoordinatorNodeID() throws NotBoundException, NumberFormatException, RemoteException {
         ArrayList<Integer> nodeIDs = new ArrayList<Integer>(this.nodeInfo.keySet());
         for(int node : nodeIDs ) {
             String nodeValue = this.nodeInfo.get(node);
@@ -130,7 +130,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     }
 
 
-    void userPrompt() throws IOException
+    void userPrompt() throws IOException, NumberFormatException, AlreadyBoundException, NotBoundException
 	{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		while(true)
@@ -171,6 +171,20 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     private String getIP() {
         return this.nodeIP;
     }
+
+
+	@Override
+	public void remoteInitiateElection() throws RemoteException {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public HashMap<Integer, String> remoteInsertNode(int nodeID, String nodeIP) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	
 
