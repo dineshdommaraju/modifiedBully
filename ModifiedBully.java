@@ -189,7 +189,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
 		
 	}
 
-	void userPromt() throws IOException
+	void userPrompt() throws IOException
 	{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		while(true)
@@ -198,13 +198,13 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
 			String[] commandTokens=command.split(" ");
 			if(commandTokens[0].equals("join"))
 			{
-				if(commandTokens.length ==1)
+				if(commandTokens.length ==2)
 				{
 					
-					join();
+					join(Integer.parseInt(commandTokens[1]));
 				}else if(commandTokens.length==3)
 				{
-					join()
+					join(commandTokens[2],Integer.parseInt(commandTokens[3]),Integer.parseInt(commandTokens[1]));
 				}
 				
 			}else if(commandTokens[0].equals("request"))
@@ -231,7 +231,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     	
     	
     	ModifiedBully obj=new ModifiedBully();
-    	obj.userPromt();
+    	obj.userPrompt();
     	
     	/*
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
