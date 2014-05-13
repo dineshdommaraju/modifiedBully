@@ -85,21 +85,7 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
     }
 
     
-    //Get the details of the nodes in the network and updating other nodes with the new node joined
-    public HashMap<Integer,String> getDetails(int nodeID, String nodeIP) throws RemoteException, NotBoundException{
-    	
-    	Registry registry;
-    	RemoteInterface ri;
-    	for(Entry<Integer, String> entry: nodeInfo.entrySet()){
-    		String[] tempIP = entry.getValue().split("|");
-    		registry = LocateRegistry.getRegistry(tempIP[0],Integer.parseInt(tempIP[1]));
-    		ri = (RemoteInterface)registry.lookup(""+entry.getKey());
-    		ri.newNodeJoined(nodeID,nodeIP);
-    	}
-    	HashMap<Integer,String> peerDetails =  this.nodeInfo;
-    	this.nodeInfo.put(nodeID, nodeIP);
-    	return peerDetails;
-    }
+    
     
     
    
