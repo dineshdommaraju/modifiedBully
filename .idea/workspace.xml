@@ -66,14 +66,12 @@
       <file leaf-file-name="ModifiedBully.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ModifiedBully.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.57990116" vertical-offset="2980" max-vertical-offset="5389">
-              <caret line="196" column="26" selection-start-line="196" selection-start-column="26" selection-end-line="196" selection-end-column="26" />
+            <state vertical-scroll-proportion="0.8039539" vertical-offset="2657" max-vertical-offset="4522">
+              <caret line="185" column="31" selection-start-line="185" selection-start-column="31" selection-end-line="185" selection-end-column="31" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#3478#3479#0" expanded="true" />
-                <element signature="e#3553#3554#0" expanded="true" />
-                <element signature="e#10203#10204#0" expanded="true" />
-                <element signature="e#10237#10238#0" expanded="true" />
+                <element signature="e#8568#8569#0" expanded="true" />
+                <element signature="e#8602#8603#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -343,14 +341,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ModifiedBully.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.57990116" vertical-offset="2980" max-vertical-offset="5389">
-          <caret line="196" column="26" selection-start-line="196" selection-start-column="26" selection-end-line="196" selection-end-column="26" />
+        <state vertical-scroll-proportion="0.8039539" vertical-offset="2657" max-vertical-offset="4522">
+          <caret line="185" column="31" selection-start-line="185" selection-start-column="31" selection-end-line="185" selection-end-column="31" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3478#3479#0" expanded="true" />
-            <element signature="e#3553#3554#0" expanded="true" />
-            <element signature="e#10203#10204#0" expanded="true" />
-            <element signature="e#10237#10238#0" expanded="true" />
+            <element signature="e#8568#8569#0" expanded="true" />
+            <element signature="e#8602#8603#0" expanded="true" />
           </folding>
         </state>
       </provider>
