@@ -102,8 +102,8 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
         for(int node : nodeIDs ) {
             String nodeValue = this.nodeInfo.get(node);
             String[] nodeIpPort = nodeValue.split("|");
-            Registry aRegistry = LocateRegistry.getRegistry(nodeIpPort[0], nodeIpPort[1]);
-            RemoteInterface aNode = (RemoteInterface)aRegistry.lookup(node);
+            Registry aRegistry = LocateRegistry.getRegistry(nodeIpPort[0], Integer.parseInt(nodeIpPort[1]));
+            RemoteInterface aNode = (RemoteInterface)aRegistry.lookup(""+node);
             aNode.remoteBroadcastNewNodeInfo(IP, port, nodeID);
         }
     }
@@ -117,8 +117,8 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
         for(int node : nodeIDs ) {
             String nodeValue = this.nodeInfo.get(node);
             String[] nodeIpPort = nodeValue.split("|");
-            Registry aRegistry = LocateRegistry.getRegistry(nodeIpPort[0], nodeIpPort[1]);
-            RemoteInterface aNode = (RemoteInterface)aRegistry.lookup(node);
+            Registry aRegistry = LocateRegistry.getRegistry(nodeIpPort[0], Integer.parseInt(nodeIpPort[1]));
+            RemoteInterface aNode = (RemoteInterface)aRegistry.lookup(""+node);
             aNode.remoteBroadcastCoordinatorNodeID(this.nodeID);
         }
 
