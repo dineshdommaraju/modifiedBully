@@ -188,6 +188,38 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
 		criticalSectionInUse = false;
 		
 	}
+	
+	 void broadcastNewNodeInfo(String IP, int port, int nodeID) throws NotBoundException {
+	        ArrayList<Integer> nodeIDs = new ArrayList<Integer>(this.nodeInfo.keySet());
+	        for(int node : nodeIDs ) {
+	            String nodeValue = this.nodeInfo.get(node);
+	            String[] nodeIpPort = nodeValue.split("|");
+	            Registry aRegistry = LocateRegistry.getRegistry(nodeIpPort[0], nodeIpPort[1]);
+	            RemoteInterface aNode = (RemoteInterface)aRegistry.lookup(node);
+	            aNode.remoteBroadcastNewNodeInfo(IP, port, nodeID);
+	        }
+	    }
+
+	    public void remoteBroadcastNewNodeInfo(String IP, int port, int nodeID) throws RemoteException {
+	        this.nodeInfo.put(nodeID,IP + "|" + port);
+	    }
+
+	    void broadcastCoordinatorNodeID() throws NotBoundException {
+	        ArrayList<Integer> nodeIDs = new ArrayList<Integer>(this.nodeInfo.keySet());
+	        for(int node : nodeIDs ) {
+	            String nodeValue = this.nodeInfo.get(node);
+	            String[] nodeIpPort = nodeValue.split("|");
+	            Registry aRegistry = LocateRegistry.getRegistry(nodeIpPort[0], nodeIpPort[1]);
+	            RemoteInterface aNode = (RemoteInterface)aRegistry.lookup(node);
+	            aNode.remoteBroadcastCoordinatorNodeID(this.nodeID);
+	        }
+
+	    }
+
+	    public void remoteBroadcastCoordinatorNodeID(int nodeID) throws RemoteException {
+	        this.coordinatorID = nodeID;
+	        this.electionFlag = false;
+	    }
 
 	void userPrompt() throws IOException
 	{
