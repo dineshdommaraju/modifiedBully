@@ -66,18 +66,14 @@
       <file leaf-file-name="ModifiedBully.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ModifiedBully.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.428336" vertical-offset="2839" max-vertical-offset="5219">
-              <caret line="218" column="54" selection-start-line="218" selection-start-column="54" selection-end-line="218" selection-end-column="54" />
+            <state vertical-scroll-proportion="0.57990116" vertical-offset="2980" max-vertical-offset="5389">
+              <caret line="196" column="26" selection-start-line="196" selection-start-column="26" selection-end-line="196" selection-end-column="26" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#3581#3582#0" expanded="true" />
-                <element signature="e#3656#3657#0" expanded="true" />
-                <element signature="e#6725#6734#0" expanded="true" />
-                <element signature="e#7248#7249#0" expanded="true" />
-                <element signature="e#7305#7306#0" expanded="true" />
-                <element signature="e#7404#7413#0" expanded="true" />
-                <element signature="e#9746#9747#0" expanded="true" />
-                <element signature="e#9780#9781#0" expanded="true" />
+                <element signature="e#3478#3479#0" expanded="true" />
+                <element signature="e#3553#3554#0" expanded="true" />
+                <element signature="e#10203#10204#0" expanded="true" />
+                <element signature="e#10237#10238#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -86,11 +82,9 @@
       <file leaf-file-name="RemoteInterface.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/RemoteInterface.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="374">
-              <caret line="13" column="52" selection-start-line="13" selection-start-column="52" selection-end-line="13" selection-end-column="52" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="442">
+              <caret line="14" column="108" selection-start-line="14" selection-start-column="4" selection-end-line="14" selection-end-column="108" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -341,28 +335,22 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/RemoteInterface.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="374">
-          <caret line="13" column="52" selection-start-line="13" selection-start-column="52" selection-end-line="13" selection-end-column="52" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="442">
+          <caret line="14" column="108" selection-start-line="14" selection-start-column="4" selection-end-line="14" selection-end-column="108" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ModifiedBully.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.428336" vertical-offset="2839" max-vertical-offset="5219">
-          <caret line="218" column="54" selection-start-line="218" selection-start-column="54" selection-end-line="218" selection-end-column="54" />
+        <state vertical-scroll-proportion="0.57990116" vertical-offset="2980" max-vertical-offset="5389">
+          <caret line="196" column="26" selection-start-line="196" selection-start-column="26" selection-end-line="196" selection-end-column="26" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3581#3582#0" expanded="true" />
-            <element signature="e#3656#3657#0" expanded="true" />
-            <element signature="e#6725#6734#0" expanded="true" />
-            <element signature="e#7248#7249#0" expanded="true" />
-            <element signature="e#7305#7306#0" expanded="true" />
-            <element signature="e#7404#7413#0" expanded="true" />
-            <element signature="e#9746#9747#0" expanded="true" />
-            <element signature="e#9780#9781#0" expanded="true" />
+            <element signature="e#3478#3479#0" expanded="true" />
+            <element signature="e#3553#3554#0" expanded="true" />
+            <element signature="e#10203#10204#0" expanded="true" />
+            <element signature="e#10237#10238#0" expanded="true" />
           </folding>
         </state>
       </provider>
