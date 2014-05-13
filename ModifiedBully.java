@@ -179,10 +179,30 @@ public class ModifiedBully extends UnicastRemoteObject implements RemoteInterfac
 				
 			}else if(commandTokens[0].equals("request"))
 			{
+				String nodeValue = this.nodeInfo.get(node);
+        			String[] nodeIpPort = nodeValue.split("|");
+        			Registry aRegistry = LocateRegistry.getRegistry(nodeIpPort[0], Integer.parseInt(nodeIpPort[1]));
+            			RemoteInterface aNode = (RemoteInterface)aRegistry.lookup(""+node);
+            			if(aNode.remoteAccess(nodeID))
+            				System.out.println("Node entered critical section");
+				else
+					System.out.println("Node waiting in the queue");
+            			
 				
 			}else if(commandTokens[0].equals("leave"))
 			{
-				
+				String nodeValue = this.nodeInfo.get(node);
+        			String[] nodeIpPort = nodeValue.split("|");
+        			Registry aRegistry = LocateRegistry.getRegistry(nodeIpPort[0], Integer.parseInt(nodeIpPort[1]));
+            			RemoteInterface aNode = (RemoteInterface)aRegistry.lookup(""+node);
+            			int status=aNode.remoteLeave(nodeID);
+            			if(status==0)
+            				System.out.println("Node successfully left the critical region");
+            			else
+            				System.out.println("Node still waiting in the queue for critical region");
+				else
+					System.out.println("Node not present in the queue");
+	            			
 			}else if(commandTokens[0].equals("help"))
 			{
 				
