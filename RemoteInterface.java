@@ -21,6 +21,8 @@ public interface RemoteInterface extends Remote{
 	int getCoordinatorID() throws RemoteException,NotBoundException;
 	public void displayEnteringCS() throws RemoteException,NotBoundException;
 	public int remoteGetMessageCount() throws RemoteException,NotBoundException;
+	public int remoteGetCriticalSectionStatus() throws RemoteException,NotBoundException;
+	public void remoteCheckAlive() throws RemoteException,NotBoundException;
 }
 
 
